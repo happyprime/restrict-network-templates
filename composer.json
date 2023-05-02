@@ -1,0 +1,25 @@
+{
+	"name": "happyprime/restrict-network-templates",
+	"description": "Restrict the use of templates and network- prefixed parts to the main site.",
+	"version": "0.0.1",
+	"type": "wordpress-plugin",
+	"license": "GPLv2-or-later",
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true,
+			"composer/installers": true
+		}
+	},
+	"require-dev": {
+		"squizlabs/php_codesniffer": "*",
+		"dealerdirect/phpcodesniffer-composer-installer": "*",
+		"phpcompatibility/phpcompatibility-wp": "*",
+		"sirbrillig/phpcs-variable-analysis": "*",
+		"wp-coding-standards/wpcs": "*"
+	},
+	"scripts": {
+		"phpcs": "vendor/bin/phpcs",
+		"phpcbf": "vendor/bin/phpcbf",
+		"test": "vendor/bin/phpunit"
+	}
+}
