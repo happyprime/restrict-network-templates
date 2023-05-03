@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:  Restrict Network Templates
- * Description:  Restrict the use of templates and network- prefixed parts to the main site.
- * Version:      0.0.1
+ * Description:  Restrict the management of templates to a network's main site.
+ * Version:      1.0.0
  * Plugin URI:   https://github.com/happyprime/restrict-network-templates/
  * Author:       Happy Prime
  * Author URI:   https://happyprime.co
@@ -26,11 +26,10 @@ namespace RestrictNetworkTemplates;
 
 add_filter( 'default_template_types', '__return_empty_array' );
 add_filter( 'rest_post_dispatch', __NAMESPACE__ . '\filter_wp_template_rest_response', 10, 3 );
-add_filter( 'get_block_templates', __NAMESPACE__ . '\filter_block_template_parts', 10, 3 );
 add_filter( 'rest_request_before_callbacks', __NAMESPACE__ . '\rest_pre_check', 10, 3 );
 
 /**
- * Filter REST requests for templates to only those the user is able to edit.
+ * Filter REST requests for templates to include results only on the main site.
  *
  * @param \WP_REST_Respones $response The prepared REST response.
  * @param \WP_REST_Server   $server   The REST server.
@@ -50,44 +49,17 @@ function filter_wp_template_rest_response( $response, $server, $request ) {
 }
 
 /**
- * Filter block template parts on sub-sites so that network-level template
- * parts are not offered to the user.
- *
- * @param \WP_Block_Template[] $query_result Array of found block templates.
- * @param array                $query {
- *     Optional. Arguments to retrieve templates.
- *
- *     @type array  $slug__in List of slugs to include.
- *     @type int    $wp_id Post ID of customized template.
- * }
- * @param string               $template_type wp_template or wp_template_part.
- * @return \WP_Block_Template[] Modified array of found block templates.
- */
-function filter_block_template_parts( $query_result, $query, $template_type ) {
-	if ( is_main_site() || 'wp_template_part' !== $template_type ) {
-		return $query_result;
-	}
-
-	$filtered = [];
-
-	foreach ( $query_result as $template ) {
-		if ( 'network-' === substr( $template->slug, 0, 8 ) ) {
-			continue;
-		}
-		$filtered[] = $template;
-	}
-
-	return $filtered;
-}
-
-/**
- * Prevent a user from saving templates in the site editor.
+ * Prevent a user from saving templates in the site editor on sub-sites.
  *
  * @param mixed            $response Result to send to the client. This is a pre-check, so we expect null.
  * @param array            $handler  Route handler used for the request.
  * @param \WP_REST_Request $request  Request used to generate the response.
  */
 function rest_pre_check( $response, $handler, $request ) {
+	if ( is_main_site() ) {
+		return $response;
+	}
+
 	if ( 'GET' === $request->get_method() ) {
 		return $response;
 	}
@@ -98,19 +70,13 @@ function rest_pre_check( $response, $handler, $request ) {
 
 	$route = $request->get_route();
 
-	if ( '/wp/v2/templates/' !== substr( $route, 0, 17 ) ) {
-		return $response;
-	}
-
-	$template_id = array_pop( explode( '/wp/v2/templates/', $route ) );
-
-	if ( current_user_can( 'edit-template-part', $template_id ) ) {
+	if ( ! str_starts_with( $route, '/wp/v2/templates' ) ) {
 		return $response;
 	}
 
 	return new \WP_Error(
 		'rest_cannot_manage_templates',
-		__( 'Sorry, you are not allowed to access the templates on this site.' ),
+		__( 'Sorry, templates must be managed on the main site.' ),
 		array(
 			'status' => rest_authorization_required_code(),
 		)

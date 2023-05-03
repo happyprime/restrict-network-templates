@@ -1,7 +1,7 @@
 {
 	"name": "happyprime/restrict-network-templates",
-	"description": "Restrict the use of templates and network- prefixed parts to the main site.",
-	"version": "0.0.1",
+	"description": "Restrict the management of templates to a network's main site.",
+	"version": "1.0.0",
 	"type": "wordpress-plugin",
 	"license": "GPLv2-or-later",
 	"config": {
