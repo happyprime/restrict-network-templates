@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:  Restrict Network Templates
- * Description:  Restrict the use of templates and network- prefixed parts to the main site.
+ * Description:  Restrict the use of templates to the main site.
  * Version:      0.0.1
  * Plugin URI:   https://github.com/happyprime/restrict-network-templates/
  * Author:       Happy Prime
@@ -29,7 +29,7 @@ add_filter( 'rest_post_dispatch', __NAMESPACE__ . '\filter_wp_template_rest_resp
 add_filter( 'rest_request_before_callbacks', __NAMESPACE__ . '\rest_pre_check', 10, 3 );
 
 /**
- * Filter REST requests for templates to only those the user is able to edit.
+ * Filter REST requests for templates to include results only on the main site.
  *
  * @param \WP_REST_Respones $response The prepared REST response.
  * @param \WP_REST_Server   $server   The REST server.
