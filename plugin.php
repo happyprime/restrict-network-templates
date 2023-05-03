@@ -26,7 +26,6 @@ namespace RestrictNetworkTemplates;
 
 add_filter( 'default_template_types', '__return_empty_array' );
 add_filter( 'rest_post_dispatch', __NAMESPACE__ . '\filter_wp_template_rest_response', 10, 3 );
-add_filter( 'get_block_templates', __NAMESPACE__ . '\filter_block_template_parts', 10, 3 );
 add_filter( 'rest_request_before_callbacks', __NAMESPACE__ . '\rest_pre_check', 10, 3 );
 
 /**
@@ -47,37 +46,6 @@ function filter_wp_template_rest_response( $response, $server, $request ) {
 	}
 
 	return $response;
-}
-
-/**
- * Filter block template parts on sub-sites so that network-level template
- * parts are not offered to the user.
- *
- * @param \WP_Block_Template[] $query_result Array of found block templates.
- * @param array                $query {
- *     Optional. Arguments to retrieve templates.
- *
- *     @type array  $slug__in List of slugs to include.
- *     @type int    $wp_id Post ID of customized template.
- * }
- * @param string               $template_type wp_template or wp_template_part.
- * @return \WP_Block_Template[] Modified array of found block templates.
- */
-function filter_block_template_parts( $query_result, $query, $template_type ) {
-	if ( is_main_site() || 'wp_template_part' !== $template_type ) {
-		return $query_result;
-	}
-
-	$filtered = [];
-
-	foreach ( $query_result as $template ) {
-		if ( 'network-' === substr( $template->slug, 0, 8 ) ) {
-			continue;
-		}
-		$filtered[] = $template;
-	}
-
-	return $filtered;
 }
 
 /**
