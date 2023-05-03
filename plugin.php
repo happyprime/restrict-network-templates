@@ -88,6 +88,10 @@ function filter_block_template_parts( $query_result, $query, $template_type ) {
  * @param \WP_REST_Request $request  Request used to generate the response.
  */
 function rest_pre_check( $response, $handler, $request ) {
+	if ( is_main_site() ) {
+		return $response;
+	}
+
 	if ( 'GET' === $request->get_method() ) {
 		return $response;
 	}
@@ -98,19 +102,13 @@ function rest_pre_check( $response, $handler, $request ) {
 
 	$route = $request->get_route();
 
-	if ( '/wp/v2/templates/' !== substr( $route, 0, 17 ) ) {
-		return $response;
-	}
-
-	$template_id = array_pop( explode( '/wp/v2/templates/', $route ) );
-
-	if ( current_user_can( 'edit-template-part', $template_id ) ) {
+	if ( ! str_starts_with( $route, '/wp/v2/templates' ) ) {
 		return $response;
 	}
 
 	return new \WP_Error(
 		'rest_cannot_manage_templates',
-		__( 'Sorry, you are not allowed to access the templates on this site.' ),
+		__( 'Sorry, templates must be managed on the main site.' ),
 		array(
 			'status' => rest_authorization_required_code(),
 		)
