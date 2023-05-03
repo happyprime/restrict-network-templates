@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:  Restrict Network Templates
- * Description:  Restrict the use of templates to the main site.
- * Version:      0.0.1
+ * Description:  Restrict the management of templates to a network's main site.
+ * Version:      1.0.0
  * Plugin URI:   https://github.com/happyprime/restrict-network-templates/
  * Author:       Happy Prime
  * Author URI:   https://happyprime.co
@@ -49,7 +49,7 @@ function filter_wp_template_rest_response( $response, $server, $request ) {
 }
 
 /**
- * Prevent a user from saving templates in the site editor.
+ * Prevent a user from saving templates in the site editor on sub-sites.
  *
  * @param mixed            $response Result to send to the client. This is a pre-check, so we expect null.
  * @param array            $handler  Route handler used for the request.
