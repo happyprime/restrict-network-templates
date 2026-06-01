@@ -7,19 +7,35 @@
 	"config": {
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true,
-			"composer/installers": true
+			"composer/installers": true,
+			"phpstan/extension-installer": true
+		},
+		"platform": {
+			"php": "7.4"
 		}
 	},
+	"repositories": [
+		{
+			"type": "package",
+			"package": {
+				"name": "phpcompatibility/php-compatibility",
+				"type": "phpcodesniffer-standard",
+				"version": "9.99.9",
+				"source": {
+					"url": "https://github.com/PHPCompatibility/PHPCompatibility.git",
+					"type": "git",
+					"reference": "9f7142356b5674164a6f6dbe12a7a1bcc632db21"
+				}
+			}
+		}
+	],
 	"require-dev": {
-		"squizlabs/php_codesniffer": "*",
-		"dealerdirect/phpcodesniffer-composer-installer": "*",
-		"phpcompatibility/phpcompatibility-wp": "*",
-		"sirbrillig/phpcs-variable-analysis": "*",
-		"wp-coding-standards/wpcs": "*"
+		"happyprime/coding-standards": "*",
+		"phpcompatibility/php-compatibility": "9.99.9"
 	},
 	"scripts": {
 		"phpcs": "vendor/bin/phpcs",
 		"phpcbf": "vendor/bin/phpcbf",
-		"test": "vendor/bin/phpunit"
+		"phpstan": "vendor/bin/phpstan analyse --memory-limit=2048M"
 	}
 }
