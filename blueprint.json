@@ -1,0 +1,35 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"landingPage": "/second/wp-admin/site-editor.php",
+	"preferredVersions": {
+		"php": "8.4",
+		"wp": "7.1"
+	},
+	"login": true,
+	"steps": [
+		{
+			"step": "enableMultisite"
+		},
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "git:directory",
+				"url": "https://github.com/happyprime/restrict-network-templates",
+				"ref": "trunk",
+				"path": "/"
+			},
+			"options": {
+				"activate": false,
+				"targetFolderName": "restrict-network-templates"
+			}
+		},
+		{
+			"step": "wp-cli",
+			"command": "wp plugin activate restrict-network-templates --network"
+		},
+		{
+			"step": "wp-cli",
+			"command": "wp site create --slug=second --title='Second Site'"
+		}
+	]
+}

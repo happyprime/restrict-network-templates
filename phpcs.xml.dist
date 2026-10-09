@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<ruleset name="Restrict Network Templates">
+	<file>.</file>
+
+	<rule ref="HappyPrime"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="restrict-network-templates"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="RestrictNetworkTemplates"/>
+				<element value="restrict_network_templates"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>
