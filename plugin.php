@@ -6,6 +6,8 @@
  * Plugin URI:   https://github.com/happyprime/restrict-network-templates/
  * Author:       Happy Prime
  * Author URI:   https://happyprime.co
+ * License:      GPLv2 or later
+ * License URI:  https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:  restrict-network-templates
  * Requires PHP: 7.4
  *
@@ -23,6 +25,10 @@
  */
 
 namespace RestrictNetworkTemplates;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 add_filter( 'default_template_types', '__return_empty_array' );
 add_filter( 'rest_post_dispatch', __NAMESPACE__ . '\filter_wp_template_rest_response', 10, 3 );
