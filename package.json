@@ -1,0 +1,38 @@
+{
+	"name": "restrict-network-templates",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Restrict the management of templates to a network's main site.",
+	"author": "Happy Prime",
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"wordpress",
+		"wordpress-plugin",
+		"multisite"
+	],
+	"homepage": "https://github.com/happyprime/restrict-network-templates/",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/happyprime/restrict-network-templates.git"
+	},
+	"bugs": {
+		"url": "https://github.com/happyprime/restrict-network-templates/issues"
+	},
+	"engines": {
+		"node": ">=22"
+	},
+	"devDependencies": {
+		"@wordpress/env": "^11.17.0",
+		"@wordpress/npm-package-json-lint-config": "^5.57.0",
+		"npm-package-json-lint": "^11.0.0"
+	},
+	"scripts": {
+		"env:start": "wp-env start && npm run env:seed",
+		"env:seed": "wp-env run cli --env-cwd=wp-content/plugins/restrict-network-templates wp eval-file .dev/seed.php",
+		"env:stop": "wp-env stop",
+		"env:destroy": "wp-env destroy",
+		"env:cli": "wp-env run cli",
+		"env:logs": "wp-env logs",
+		"lint:package": "node ./node_modules/npm-package-json-lint/dist/cli.js ./package.json"
+	}
+}
