@@ -1,7 +1,16 @@
-/build/
+# Ignore all 3rd party libraries.
 /node_modules
-/vendor/
+/vendor
 
 # Ignore local Claude settings
 .claude/settings.local.json
 .reviews/
+
+# wp-env
+/.wp-env.override.json
+
+# Test artifacts
+/artifacts/
+/test-results/
+/playwright-report/
+.phpunit.result.cache
