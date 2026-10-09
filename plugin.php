@@ -29,9 +29,9 @@ add_filter( 'rest_post_dispatch', __NAMESPACE__ . '\filter_wp_template_rest_resp
 add_filter( 'rest_request_before_callbacks', __NAMESPACE__ . '\rest_pre_check', 10, 3 );
 
 /**
- * Filter REST requests for templates to include results only on the main site.
+ * Empties the template list returned by the REST API on sub-sites.
  *
- * @param \WP_REST_Respones $response The prepared REST response.
+ * @param \WP_REST_Response $response The prepared REST response.
  * @param \WP_REST_Server   $server   The REST server.
  * @param \WP_REST_Request  $request  The REST request.
  * @return \WP_REST_Response The modified REST response.
@@ -49,11 +49,12 @@ function filter_wp_template_rest_response( $response, $server, $request ) {
 }
 
 /**
- * Prevent a user from saving templates in the site editor on sub-sites.
+ * Blocks requests that create, update, or delete templates on sub-sites.
  *
- * @param mixed            $response Result to send to the client. This is a pre-check, so we expect null.
- * @param array            $handler  Route handler used for the request.
- * @param \WP_REST_Request $request  Request used to generate the response.
+ * @param mixed                $response Result to send to the client. This is a pre-check, so we expect null.
+ * @param array<string, mixed> $handler  Route handler used for the request.
+ * @param \WP_REST_Request     $request  Request used to generate the response.
+ * @return mixed The unchanged response, or a WP_Error when the request is blocked.
  */
 function rest_pre_check( $response, $handler, $request ) {
 	if ( is_main_site() ) {
@@ -70,13 +71,13 @@ function rest_pre_check( $response, $handler, $request ) {
 
 	$route = $request->get_route();
 
-	if ( ! str_starts_with( $route, '/wp/v2/templates' ) ) {
+	if ( 0 !== strpos( $route, '/wp/v2/templates' ) ) {
 		return $response;
 	}
 
 	return new \WP_Error(
 		'rest_cannot_manage_templates',
-		__( 'Sorry, templates must be managed on the main site.' ),
+		__( 'Sorry, templates must be managed on the main site.', 'restrict-network-templates' ),
 		array(
 			'status' => rest_authorization_required_code(),
 		)
