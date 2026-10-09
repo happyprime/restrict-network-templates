@@ -13,9 +13,9 @@ Restrict the management of templates to a network's main site.
 
 This plugin should be network activated on a multisite network. When activated:
 
-* The list of default template types is filtered to return an empty list.
-* The `/wp/v2/templates` endpoint in WordPress returns an empty list.
-* The `WP_REST_Templates_Controller` permissions check is overridden to prevent the update of templates outside of the main site.
+* The list of default template types is filtered to return an empty list on every site.
+* On sites other than the main site, the `/wp/v2/templates` endpoint returns an empty list in the `edit` context.
+* On sites other than the main site, REST requests to create, update, or delete templates are rejected. Template parts are not affected.
 
 This plugin works in tandem with [Network Template Parts](https://github.com/happyprime/network-template-parts) to provide a framework for a shared look and feel of websites on a multisite network.
 
